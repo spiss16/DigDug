@@ -1,20 +1,24 @@
 package com.mattspissell.digdug;
 
 import android.content.Context;
+import android.graphics.Camera;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * Created by Jessica on 12/13/2017.
  */
 
-public class GameView extends SurfaceView implements Runnable {
+public class GameView extends SurfaceView implements Runnable, View.OnTouchListener {
 
     volatile boolean playing = false;
     Thread gameThread;
@@ -28,8 +32,10 @@ public class GameView extends SurfaceView implements Runnable {
     private static int SCREEN_HEIGHT;
     private static int SCREEN_WIDTH;
     private List<GameObject> gameObjects = new ArrayList<GameObject>();
+    private Camera camera;
     private Paint paint;
     int i;
+    private int numSides = 3;
 
     public static int getScreenHeight() {
         return SCREEN_HEIGHT;
@@ -50,6 +56,24 @@ public class GameView extends SurfaceView implements Runnable {
         GameObject temp = new Polygon(new Vector2(getScreenWidth()/2.0f, getScreenHeight()/2.0f),
                 5, 20.0f);
         gameObjects.add(temp);
+        this.setOnTouchListener(this);
+    }
+
+    @Override
+    public boolean onTouch (View view, MotionEvent motionEvent){
+        switch(motionEvent.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                break;
+            case MotionEvent.ACTION_UP:
+                gameObjects.add(new Polygon(new Vector2(motionEvent.getX(), motionEvent.getY()),
+                        numSides, 60.0f));
+                numSides++;
+                break;
+            case MotionEvent.ACTION_MOVE:
+                break;
+
+        }
+        return true;
     }
 
     @Override
