@@ -47,6 +47,9 @@ public class GameView extends SurfaceView implements Runnable {
         SCREEN_HEIGHT = point.y;
         SCREEN_WIDTH = point.x;
         gameObjects.add(new Starfield(100,30.0f));
+        GameObject temp = new Polygon(new Vector2(getScreenWidth()/2.0f, getScreenHeight()/2.0f),
+                5, 20.0f);
+        gameObjects.add(temp);
     }
 
     @Override

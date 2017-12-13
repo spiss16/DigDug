@@ -12,6 +12,13 @@ public class Vector2 {
     public static float magnitude(Vector2 vector2){
         return (float)Math.sqrt(vector2.x * vector2.x + vector2.y * vector2.y);
     }
+    public static Vector2 add(Vector2 rhs, Vector2 lhs){
+        return new Vector2(rhs.x + lhs.x, rhs.y + lhs.y);
+    }
+    public static Vector2 subtract(Vector2 rhs, Vector2 lhs){
+        return new Vector2(rhs.x - lhs.x, rhs.y - lhs.y);
+    }
+
     public static void normalize(Vector2 vector){
         double temp = magnitude(vector);
         vector.x /= temp;
