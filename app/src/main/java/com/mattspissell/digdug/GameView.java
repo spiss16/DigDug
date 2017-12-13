@@ -60,12 +60,12 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     }
 
     @Override
-    public boolean onTouch (View view, MotionEvent motionEvent){
-        switch(motionEvent.getAction()){
+    public boolean onTouch (View view, MotionEvent event){
+        switch(event.getAction()){
             case MotionEvent.ACTION_DOWN:
                 break;
             case MotionEvent.ACTION_UP:
-                gameObjects.add(new Polygon(new Vector2(motionEvent.getX(), motionEvent.getY()),
+                gameObjects.add(new Polygon(new Vector2(event.getX(), event.getY()),
                         numSides, 60.0f));
                 numSides++;
                 break;
