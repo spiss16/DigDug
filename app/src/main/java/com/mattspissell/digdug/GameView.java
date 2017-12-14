@@ -12,6 +12,7 @@ import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * Created by Jessica on 12/13/2017.
@@ -31,11 +32,11 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     private static int SCREEN_HEIGHT;
     private static int SCREEN_WIDTH;
     private List<GameObject> gameObjects = new ArrayList<GameObject>();
-
     private Camera camera;
     private Paint paint;
     int i;
     private int numSides = 3;
+
     public static int getScreenHeight() {
         return SCREEN_HEIGHT;
     }
@@ -59,28 +60,21 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     }
 
     @Override
-    public boolean onTouch(View v,MotionEvent event) {
-
+    public boolean onTouch (View view, MotionEvent event){
         switch(event.getAction()){
             case MotionEvent.ACTION_DOWN:
-
                 break;
             case MotionEvent.ACTION_UP:
                 gameObjects.add(new Polygon(new Vector2(event.getX(), event.getY()),
-                        numSides,
-                        60.0f));
+                        numSides, 60.0f));
                 numSides++;
-
-
-
                 break;
             case MotionEvent.ACTION_MOVE:
-
                 break;
+
         }
         return true;
     }
-
 
     @Override
     public void run() {
