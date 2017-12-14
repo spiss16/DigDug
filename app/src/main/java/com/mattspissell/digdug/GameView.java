@@ -1,6 +1,8 @@
 package com.mattspissell.digdug;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Camera;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -37,6 +39,10 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     int i;
     private int numSides = 3;
 
+    private Bitmap background;
+    private Background bg;
+
+
     public static int getScreenHeight() {
         return SCREEN_HEIGHT;
     }
@@ -52,10 +58,20 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         screenSize = point;
         SCREEN_HEIGHT = point.y;
         SCREEN_WIDTH = point.x;
-        gameObjects.add(new Starfield(100,30.0f));
-        GameObject temp = new Polygon(new Vector2(getScreenWidth()/2.0f, getScreenHeight()/2.0f),
-                5, 20.0f);
-        gameObjects.add(temp);
+
+        // Background starting here
+        background = BitmapFactory.decodeResource(getResources(),R.drawable.background);
+        background = Bitmap.createScaledBitmap(background,SCREEN_WIDTH,SCREEN_HEIGHT,false);
+        bg = new Background(background);
+
+
+        // Starfield example
+        //  gameObjects.add(new Starfield(100,30.0f));
+      // Polygon Example
+        // GameObject temp = new Polygon(new Vector2(getScreenWidth()/2.0f, getScreenHeight()/2.0f),5, 20.0f);
+        // gameObjects.add(temp);
+
+
         this.setOnTouchListener(this);
     }
 
@@ -110,16 +126,22 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         for(i = 0; i < gameObjects.size(); i++){
             gameObjects.get(i).onUpdate();
         }
+
+        bg.update();
     }
 
     void draw(){
         if(surfaceHolder.getSurface().isValid()){
             Canvas canvas = surfaceHolder.lockCanvas();
             //Draw
-            canvas.drawARGB(255, 0, 0, 0);
-            for(i = 0; i < gameObjects.size(); i++){
-                gameObjects.get(i).onDraw(canvas);
-            }
+            // Example
+              // canvas.drawARGB(255, 0, 0, 0);
+              //for(i = 0; i < gameObjects.size(); i++){
+              //  gameObjects.get(i).onDraw(canvas);
+              //}
+
+            bg.draw(canvas);
+
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
     }
