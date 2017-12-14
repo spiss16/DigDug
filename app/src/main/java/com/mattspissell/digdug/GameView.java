@@ -31,8 +31,8 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     private long currentTimeMilliseconds;
     public static float deltaTime; //seconds
     Point screenSize;
-    private static int SCREEN_HEIGHT;
-    private static int SCREEN_WIDTH;
+    public static int SCREEN_HEIGHT;
+    public static int SCREEN_WIDTH;
     private List<GameObject> gameObjects = new ArrayList<GameObject>();
     private Camera camera;
     private Paint paint;
@@ -63,6 +63,7 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         background = BitmapFactory.decodeResource(getResources(),R.drawable.background);
         background = Bitmap.createScaledBitmap(background,SCREEN_WIDTH,SCREEN_HEIGHT,false);
         bg = new Background(background);
+        bg.setVector(-3);
 
 
         // Starfield example
