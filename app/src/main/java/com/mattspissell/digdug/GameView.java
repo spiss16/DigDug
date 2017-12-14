@@ -31,17 +31,20 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     private long currentTimeMilliseconds;
     public static float deltaTime; //seconds
     Point screenSize;
-    private static int SCREEN_HEIGHT;
-    private static int SCREEN_WIDTH;
+    public static int SCREEN_HEIGHT;
+    public static int SCREEN_WIDTH;
     private List<GameObject> gameObjects = new ArrayList<GameObject>();
     private Camera camera;
     private Paint paint;
     int i;
     private int numSides = 3;
 
+    public static final int MOVESPEED = -3;
+
+
     private Bitmap background;
     private Background bg;
-
+    private Player player;
 
     public static int getScreenHeight() {
         return SCREEN_HEIGHT;
@@ -59,31 +62,40 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         SCREEN_HEIGHT = point.y;
         SCREEN_WIDTH = point.x;
 
-        // Background starting here
+        // Background
+
         background = BitmapFactory.decodeResource(getResources(),R.drawable.background);
-        background = Bitmap.createScaledBitmap(background,SCREEN_WIDTH,SCREEN_HEIGHT,false);
+        background = Bitmap.createScaledBitmap(background,SCREEN_WIDTH,SCREEN_HEIGHT, false);
         bg = new Background(background);
-
-
-        // Starfield example
-        //  gameObjects.add(new Starfield(100,30.0f));
-      // Polygon Example
-        // GameObject temp = new Polygon(new Vector2(getScreenWidth()/2.0f, getScreenHeight()/2.0f),5, 20.0f);
-        // gameObjects.add(temp);
-
-
+        // Player
+        player = new Player(BitmapFactory.decodeResource(getResources(),R.drawable.dugwalk),16,15,2);
         this.setOnTouchListener(this);
     }
 
     @Override
     public boolean onTouch (View view, MotionEvent event){
+        if(event.getActionButton()==MotionEvent.ACTION_DOWN){
+            if(!player.getPlaying())
+            {
+                player.setPlaying(true);
+            }
+            else{
+                player.setUp(true);
+            }
+            return true;
+
+        }
+        if(event.getActionButton()==MotionEvent.ACTION_UP){
+            player.setUp(false);
+            return true;
+
+        }
+
+
         switch(event.getAction()){
             case MotionEvent.ACTION_DOWN:
                 break;
             case MotionEvent.ACTION_UP:
-                gameObjects.add(new Polygon(new Vector2(event.getX(), event.getY()),
-                        numSides, 60.0f));
-                numSides++;
                 break;
             case MotionEvent.ACTION_MOVE:
                 break;
@@ -123,24 +135,21 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     }
 
     void update(){
-        for(i = 0; i < gameObjects.size(); i++){
-            gameObjects.get(i).onUpdate();
+        if(player.getPlaying()) {
+            bg.update();
+            player.update();
         }
-
-        bg.update();
     }
 
     void draw(){
+        final float scaleFactorX = (float)SCREEN_WIDTH/819;
+        final float scaleFactorY = (float)SCREEN_HEIGHT/460;
+
         if(surfaceHolder.getSurface().isValid()){
             Canvas canvas = surfaceHolder.lockCanvas();
-            //Draw
-            // Example
-              // canvas.drawARGB(255, 0, 0, 0);
-              //for(i = 0; i < gameObjects.size(); i++){
-              //  gameObjects.get(i).onDraw(canvas);
-              //}
 
             bg.draw(canvas);
+            player.draw(canvas);
 
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
