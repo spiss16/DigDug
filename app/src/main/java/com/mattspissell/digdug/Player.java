@@ -33,7 +33,7 @@ public class Player extends GameObject{
             image[i] = Bitmap.createBitmap(spritesheet, i*width, 0 , width, height);
 
             animation.setFrames(image);
-            animation.setDelay(10);
+            animation.setDelay(300);
             startTime = System.nanoTime();
 
         }

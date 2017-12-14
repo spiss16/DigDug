@@ -45,7 +45,7 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     private Bitmap background;
     private Background bg;
     private Player player;
-
+    private Bitmap spritesheet;
     public static int getScreenHeight() {
         return SCREEN_HEIGHT;
     }
@@ -68,7 +68,10 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         background = Bitmap.createScaledBitmap(background,SCREEN_WIDTH,SCREEN_HEIGHT, false);
         bg = new Background(background);
         // Player
-        player = new Player(BitmapFactory.decodeResource(getResources(),R.drawable.dugwalk),16,15,2);
+        spritesheet = BitmapFactory.decodeResource(getResources(),R.drawable.dugwalk);
+        spritesheet = Bitmap.createScaledBitmap(spritesheet,1270,150, false);
+        player = new Player(spritesheet,160,150,2);
+
         this.setOnTouchListener(this);
     }
 
