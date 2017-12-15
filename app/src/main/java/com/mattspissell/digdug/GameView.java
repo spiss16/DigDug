@@ -87,39 +87,55 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
 
     @Override
     public boolean onTouch (View view, MotionEvent event){
-        if(event.getActionButton()==MotionEvent.ACTION_DOWN){
-            if(!player.getPlaying())
-            {
-                player.setPlaying(true);
-                dragon.setPlaying(true);
-                goggles.setPlaying(true);
-            }
-            else{
+        player.setPlaying(true);
+
+        int hL = SCREEN_HEIGHT/2;
+        int vLL = SCREEN_WIDTH/4;
+        int vLR = (SCREEN_WIDTH)/4;
+
+        int x = (int) event.getX();
+        int y = (int) event.getY();
+        if(event.getAction()==MotionEvent.ACTION_DOWN){
+            if((x>vLL)&&(x<vLR)&&(y>SCREEN_HEIGHT)&&(y<hL)){
                 player.setUp(true);
-                dragon.setUp(true);
-                goggles.setUp(true);
+            } else if((x>vLL)&&(x<vLR)&&(y>hL)&&(y<SCREEN_HEIGHT)){
+                player.setDown(true);
+            } else if((x>0)&&(x<vLL)&&(y>0)&&(y<SCREEN_HEIGHT)){
+                player.setLeft(true);
+            } else {
+                player.setRight(true);
             }
-            return true;
-
-        }
-        if(event.getActionButton()==MotionEvent.ACTION_UP){
-            player.setUp(false);
-            return true;
-
         }
 
-
+/*
         switch(event.getAction()){
             case MotionEvent.ACTION_DOWN:
+                if((x>vLL)&&(x<vLR)&&(y>SCREEN_HEIGHT)&&(y<hL)){
+                    player.setUp(true);
+                } else if((x>vLL)&&(x<vLR)&&(y>hL)&&(y<SCREEN_HEIGHT)){
+                    player.setDown(true);
+                } else if((x>0)&&(x<vLL)&&(y>0)&&(y<SCREEN_HEIGHT)){
+                    player.setLeft(true);
+                } else {
+                    player.setDown(true);
+                }
+
                 break;
             case MotionEvent.ACTION_UP:
+           /*
+           gameObjects.add(new Polygon(new Vector2(event.getX(),event.getY()),numSides,60.0f)
+           numSides++;
+
+
                 break;
             case MotionEvent.ACTION_MOVE:
                 break;
-
         }
+*/
         return true;
     }
+
+
 
     @Override
     public void run() {

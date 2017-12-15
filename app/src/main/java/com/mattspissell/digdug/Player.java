@@ -12,7 +12,7 @@ public class Player extends GameObject{
     private int score;
     private double dya;
     private double dxa;
-    private boolean up;
+    private boolean up, down, left, right;
     private boolean side;
     private boolean playing;
     private Animation animation = new Animation();
@@ -76,11 +76,37 @@ public class Player extends GameObject{
 
 
     public void setUp(boolean b){up = b;}
+    public void setDown(boolean c){down = c;}
+    public void setLeft(boolean d){left = d;}
+    public void setRight(boolean e){right = e;}
+
 
     public void update(){
         animation.update();
 
         // If statements based on user input that declare the dx and dy
+        // If statements based on user input that declare the dx and dy
+        if(up){
+            dy = (int)(dya-=1.1);
+        } else if (down){
+            dy = (int)(dya+=1.1);
+        } else if (left){
+            dx = (int)(dxa-=1.1);
+        } else if (right) {
+            dx = (int)(dxa+=1.1);
+        } else{
+            dx = (int)(dxa +=1.1);
+        }
+
+        //Capped speed
+        if(dy>5)dy=5;
+        if(dy<-5)dy = -5;
+        y += dy*2;
+        dy = 0;
+        if(dx>5)dx=5;
+        if(dx<-5)dx = -5;
+        x += dx*2;
+        dx = 0;
 
     }
 
@@ -94,6 +120,7 @@ public class Player extends GameObject{
     public boolean getPlaying(){return playing;}
     public void setPlaying(boolean b){playing = b;}
     public void resetDYA(){dya = 0;}
+    public void resetDXA(){dxa = 0;}
     public void resetScore(){score = 0;}
 
 }
