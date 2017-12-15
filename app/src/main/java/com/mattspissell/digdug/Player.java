@@ -10,14 +10,17 @@ import android.graphics.Canvas;
 public class Player extends GameObject{
     private Bitmap spritesheet;
     private int score;
-    private double dya;
     private double dxa;
-    private boolean up, down, left, right;
+    private boolean up, down, left, right, horizontal, vertical;
     private boolean side;
     private boolean playing;
     private Animation animation = new Animation();
     private long startTime;
-    int direction;
+    int dir;
+
+
+    public void setx(boolean x){horizontal = x;}
+    public void sety(boolean y){vertical = y;}
 
     public Player(Bitmap res, int w, int h, int numFrames){
         x = 100;
@@ -26,21 +29,24 @@ public class Player extends GameObject{
         score = 0;
         height = h;
         width = w;
+        int dir;
+
+
+
+
 
         Bitmap[] image = new Bitmap[numFrames];
         spritesheet = res;
-        direction = 1;
-        //if(direction = digright) {
-            for (int i = 0; i < image.length; i++) {
-                if(direction == 0) {
-                    image[i] = Bitmap.createBitmap(spritesheet, i * width, 0, width, height);
 
+            for (int i = 0; i < image.length; i++) {
+                //right
+                if(!horizontal && !vertical) {
+                    image[i] = Bitmap.createBitmap(spritesheet, i * width, 0, width, height);
                     animation.setFrames(image);
                     animation.setDelay(300);
                     startTime = System.nanoTime();}
-
-                    else if(direction == 1){
-                        //for (int i = 0; i < image.length; i++) {
+                //up
+                    else if(!horizontal && vertical){
                             image[i] = Bitmap.createBitmap(spritesheet, (i+2) * width, 0, width, height);
 
                             animation.setFrames(image);
@@ -48,7 +54,8 @@ public class Player extends GameObject{
                             startTime = System.nanoTime();
 
                         }
-                    else if(direction == 2) {
+                        //left
+                    else if(horizontal && !vertical) {
                         //for (int i = 0; i < image.length; i++) {
                             image[i] = Bitmap.createBitmap(spritesheet, (i+4) * width, 0, width, height);
 
@@ -57,8 +64,8 @@ public class Player extends GameObject{
                             startTime = System.nanoTime();
 
                         }
-
-                    else//(direction = digdown)
+                    //down
+                    else if(horizontal && vertical)//(direction = digdown)
                      {
                         //for (int i = 0; i < image.length; i++) {
                             image[i] = Bitmap.createBitmap(spritesheet, (i+6) * width, 0, width, height);
@@ -87,21 +94,22 @@ public class Player extends GameObject{
         // If statements based on user input that declare the dx and dy
         // If statements based on user input that declare the dx and dy
         if(up){
-            dy = (int)(dya=-5);
+            dy = -5;
             dx = 0;
         } else if (down){
-            dy = (int)(dya=5);
+            dy = 5;
             dx = 0;
         } else if (left){
             dy=0;
-            dx = (int)(dxa=-5);
+            dx = -5;
         } else if (right) {
-            dx = (int)(dxa=5);
+            dx = 5;
             dy=0;
-        } else{
+        } /*else{
             dy = 0;
             dx = (int)(dxa =5);
-        }
+            direction = 0;
+        }*/
 
         //Capped speed
         if(dy>5)dy=5;
@@ -124,7 +132,7 @@ public class Player extends GameObject{
 
     public boolean getPlaying(){return playing;}
     public void setPlaying(boolean b){playing = b;}
-    public void resetDYA(){dya = 0;}
+    public void resetDY(){dy = 0;}
     public void resetDXA(){dxa = 0;}
     public void resetScore(){score = 0;}
 

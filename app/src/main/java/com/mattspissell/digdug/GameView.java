@@ -36,7 +36,7 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     private List<GameObject> gameObjects = new ArrayList<GameObject>();
     private Camera camera;
     private Paint paint;
-    int i;
+    int i, dir;
     private int numSides = 3;
 
     public static final int MOVESPEED = -3;
@@ -96,55 +96,44 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         int x = (int) event.getX();
         int y = (int) event.getY();
         if(event.getAction()==MotionEvent.ACTION_DOWN){
-            if((x>vLL)&&(x<vLR)&&(y>0)&&(y<hL)){
+            //right
+            if((x>vLR)&&(x<SCREEN_WIDTH)&&(y>0)&&(y<SCREEN_HEIGHT)){
+            player.setUp(false);
+            player.setDown(false);
+            player.setLeft(false);
+            player.setRight(true);
+            player.setx(false);
+            player.sety(false);
+        }
+        //up
+        else if((x>vLL)&&(x<vLR)&&(y>0)&&(y<hL)){
                 player.setUp(true);
                 player.setDown(false);
                 player.setLeft(false);
                 player.setRight(false);
-            } else if((x>vLL)&&(x<vLR)&&(y>hL)&&(y<SCREEN_HEIGHT)){
-                player.setUp(false);
-                player.setDown(true);
-                player.setLeft(false);
-                player.setRight(false);
-            } else if((x>0)&&(x<vLL)&&(y>0)&&(y<SCREEN_HEIGHT)){
+                player.setx(false);
+                player.sety(true);
+            }
+            //left
+            else if((x>0)&&(x<vLL)&&(y>0)&&(y<SCREEN_HEIGHT)){
                 player.setUp(false);
                 player.setDown(false);
                 player.setLeft(true);
                 player.setRight(false);
-            } else if((x>vLR)&&(x<SCREEN_WIDTH)&&(y>0)&&(y<SCREEN_HEIGHT)){
+                player.setx(true);
+                player.sety(false);
+            }
+            //down
+            else if((x>vLL)&&(x<vLR)&&(y>hL)&&(y<SCREEN_HEIGHT)){
                 player.setUp(false);
-                player.setDown(false);
+                player.setDown(true);
                 player.setLeft(false);
-                player.setRight(true);
+                player.setRight(false);
+                player.setx(true);
+                player.sety(true);
+
             }
         }
-        //player.update();
-
-/*
-        switch(event.getAction()){
-            case MotionEvent.ACTION_DOWN:
-                if((x>vLL)&&(x<vLR)&&(y>SCREEN_HEIGHT)&&(y<hL)){
-                    player.setUp(true);
-                } else if((x>vLL)&&(x<vLR)&&(y>hL)&&(y<SCREEN_HEIGHT)){
-                    player.setDown(true);
-                } else if((x>0)&&(x<vLL)&&(y>0)&&(y<SCREEN_HEIGHT)){
-                    player.setLeft(true);
-                } else {
-                    player.setDown(true);
-                }
-
-                break;
-            case MotionEvent.ACTION_UP:
-           /*
-           gameObjects.add(new Polygon(new Vector2(event.getX(),event.getY()),numSides,60.0f)
-           numSides++;
-
-
-                break;
-            case MotionEvent.ACTION_MOVE:
-                break;
-        }
-*/
         return true;
     }
 
