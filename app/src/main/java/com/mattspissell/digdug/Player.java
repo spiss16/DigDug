@@ -88,7 +88,7 @@ public class Player extends GameObject{
                 dx = 0;
             } else{
                 dy = -5;
-                dx = 0;
+                dx = -1;
             }
         }
         else if (down){
@@ -97,7 +97,7 @@ public class Player extends GameObject{
                 dx = 0;
             } else{
                 dy = 5;
-                dx = 0;
+                dx = -1;
             }
         }
         else if (left){

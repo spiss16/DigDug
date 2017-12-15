@@ -39,6 +39,7 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     int i, dir;
     private int numSides = 3;
     private ArrayList<Tunnel> tunnel;
+    private long tunnelStartTime;
 
     public static final int MOVESPEED = -3;
 
@@ -49,10 +50,10 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     private Dragon dragon;
     private Goggles goggles;
     private Bitmap spritesheet, dragonspritesheet, gogglesspritesheet;
+
     public static int getScreenHeight() {
         return SCREEN_HEIGHT;
     }
-
     public static int getScreenWidth() {
         return SCREEN_WIDTH;
     }
@@ -85,6 +86,8 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         goggles = new Goggles(gogglesspritesheet,160,150,2);
 
         tunnel = new ArrayList<>();
+
+        tunnelStartTime = System.nanoTime();
 
         this.setOnTouchListener(this);
     }
@@ -176,13 +179,22 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     void update(){
         if(player.getPlaying()) {
             bg.update();
-            for(int i = 0; i<tunnel.size(); i++){
-                tunnel.get(i).update();
-                if(tunnel.get(i).getX()<-10)
-                {
-                    tunnel.remove(i);
-                }
+
+
+            // Investigate this to improve performance
+            long elapsed = (System.nanoTime()-tunnelStartTime)/1;
+            if(elapsed > 1000000000) {
+                tunnel.add(new Tunnel(player.getX(),player.getY()));
+                tunnelStartTime = System.nanoTime();
             }
+
+                for (int i = 0; i < tunnel.size(); i++) {
+                    tunnel.get(i).update();
+                    if (tunnel.get(i).getX() < -10) {
+                        tunnel.remove(i);
+                    }
+                }
+
             player.update();
             dragon.update();
             goggles.update();
@@ -193,9 +205,6 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     }
 
     void draw(){
-        final float scaleFactorX = (float)SCREEN_WIDTH/819;
-        final float scaleFactorY = (float)SCREEN_HEIGHT/460;
-
         if(surfaceHolder.getSurface().isValid()){
             Canvas canvas = surfaceHolder.lockCanvas();
 
@@ -206,9 +215,8 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
             player.draw(canvas);
             dragon.draw(canvas);
             goggles.draw(canvas);
+
             surfaceHolder.unlockCanvasAndPost(canvas);
-
-
         }
     }
 }
