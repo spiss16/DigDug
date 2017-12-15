@@ -17,6 +17,7 @@ public class Player extends GameObject{
     private boolean playing;
     private Animation animation = new Animation();
     private long startTime;
+    int direction;
 
     public Player(Bitmap res, int w, int h, int numFrames){
         x = 100;
@@ -28,15 +29,48 @@ public class Player extends GameObject{
 
         Bitmap[] image = new Bitmap[numFrames];
         spritesheet = res;
+        direction = 1;
+        //if(direction = digright) {
+            for (int i = 0; i < image.length; i++) {
+                if(direction == 0) {
+                    image[i] = Bitmap.createBitmap(spritesheet, i * width, 0, width, height);
 
-        for(int i = 0; i < image.length; i++){
-            image[i] = Bitmap.createBitmap(spritesheet, i*width, 0 , width, height);
+                    animation.setFrames(image);
+                    animation.setDelay(300);
+                    startTime = System.nanoTime();}
 
-            animation.setFrames(image);
-            animation.setDelay(300);
-            startTime = System.nanoTime();
+                    else if(direction == 1){
+                        //for (int i = 0; i < image.length; i++) {
+                            image[i] = Bitmap.createBitmap(spritesheet, (i+2) * width, 0, width, height);
 
-        }
+                            animation.setFrames(image);
+                            animation.setDelay(300);
+                            startTime = System.nanoTime();
+
+                        }
+                    else if(direction == 2) {
+                        //for (int i = 0; i < image.length; i++) {
+                            image[i] = Bitmap.createBitmap(spritesheet, (i+4) * width, 0, width, height);
+
+                            animation.setFrames(image);
+                            animation.setDelay(300);
+                            startTime = System.nanoTime();
+
+                        }
+
+                    else//(direction = digdown)
+                     {
+                        //for (int i = 0; i < image.length; i++) {
+                            image[i] = Bitmap.createBitmap(spritesheet, (i+6) * width, 0, width, height);
+
+                            animation.setFrames(image);
+                            animation.setDelay(300);
+                            startTime = System.nanoTime();
+
+
+                    }
+                }
+
 
     }
 

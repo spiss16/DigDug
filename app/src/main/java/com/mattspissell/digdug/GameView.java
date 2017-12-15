@@ -45,7 +45,9 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     private Bitmap background;
     private Background bg;
     private Player player;
-    private Bitmap spritesheet;
+    private Dragon dragon;
+    private Goggles goggles;
+    private Bitmap spritesheet, dragonspritesheet, gogglesspritesheet;
     public static int getScreenHeight() {
         return SCREEN_HEIGHT;
     }
@@ -68,9 +70,17 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         background = Bitmap.createScaledBitmap(background,SCREEN_WIDTH,SCREEN_HEIGHT, false);
         bg = new Background(background);
         // Player
-        spritesheet = BitmapFactory.decodeResource(getResources(),R.drawable.dugwalk);
-        spritesheet = Bitmap.createScaledBitmap(spritesheet,1270,150, false);
-        player = new Player(spritesheet,160,150,2);
+        spritesheet = BitmapFactory.decodeResource(getResources(),R.drawable.dugdig);
+        spritesheet = Bitmap.createScaledBitmap(spritesheet,2550,140, false);
+        player = new Player(spritesheet,160,140,2);
+        //Dragon
+        dragonspritesheet = BitmapFactory.decodeResource(getResources(),R.drawable.dragon);
+        dragonspritesheet = Bitmap.createScaledBitmap(dragonspritesheet,2360,150, false);
+        dragon = new Dragon(dragonspritesheet,160,140,2);
+        //Goggles
+        gogglesspritesheet = BitmapFactory.decodeResource(getResources(),R.drawable.goggles);
+        gogglesspritesheet = Bitmap.createScaledBitmap(gogglesspritesheet,1250,150, false);
+        goggles = new Goggles(gogglesspritesheet,160,150,2);
 
         this.setOnTouchListener(this);
     }
@@ -81,9 +91,13 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
             if(!player.getPlaying())
             {
                 player.setPlaying(true);
+                dragon.setPlaying(true);
+                goggles.setPlaying(true);
             }
             else{
                 player.setUp(true);
+                dragon.setUp(true);
+                goggles.setUp(true);
             }
             return true;
 
@@ -141,6 +155,8 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         if(player.getPlaying()) {
             bg.update();
             player.update();
+            dragon.update();
+            goggles.update();
         }
     }
 
@@ -153,7 +169,8 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
 
             bg.draw(canvas);
             player.draw(canvas);
-
+            dragon.draw(canvas);
+            goggles.draw(canvas);
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
     }
