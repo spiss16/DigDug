@@ -91,21 +91,34 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
 
         int hL = SCREEN_HEIGHT/2;
         int vLL = SCREEN_WIDTH/4;
-        int vLR = (SCREEN_WIDTH)/4;
+        int vLR = (3*SCREEN_WIDTH)/4;
 
         int x = (int) event.getX();
         int y = (int) event.getY();
         if(event.getAction()==MotionEvent.ACTION_DOWN){
-            if((x>vLL)&&(x<vLR)&&(y>SCREEN_HEIGHT)&&(y<hL)){
+            if((x>vLL)&&(x<vLR)&&(y>0)&&(y<hL)){
                 player.setUp(true);
+                player.setDown(false);
+                player.setLeft(false);
+                player.setRight(false);
             } else if((x>vLL)&&(x<vLR)&&(y>hL)&&(y<SCREEN_HEIGHT)){
+                player.setUp(false);
                 player.setDown(true);
+                player.setLeft(false);
+                player.setRight(false);
             } else if((x>0)&&(x<vLL)&&(y>0)&&(y<SCREEN_HEIGHT)){
+                player.setUp(false);
+                player.setDown(false);
                 player.setLeft(true);
-            } else {
+                player.setRight(false);
+            } else if((x>vLR)&&(x<SCREEN_WIDTH)&&(y>0)&&(y<SCREEN_HEIGHT)){
+                player.setUp(false);
+                player.setDown(false);
+                player.setLeft(false);
                 player.setRight(true);
             }
         }
+        //player.update();
 
 /*
         switch(event.getAction()){

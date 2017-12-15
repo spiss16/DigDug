@@ -87,15 +87,20 @@ public class Player extends GameObject{
         // If statements based on user input that declare the dx and dy
         // If statements based on user input that declare the dx and dy
         if(up){
-            dy = (int)(dya-=1.1);
+            dy = (int)(dya=-5);
+            dx = 0;
         } else if (down){
-            dy = (int)(dya+=1.1);
+            dy = (int)(dya=5);
+            dx = 0;
         } else if (left){
-            dx = (int)(dxa-=1.1);
+            dy=0;
+            dx = (int)(dxa=-5);
         } else if (right) {
-            dx = (int)(dxa+=1.1);
+            dx = (int)(dxa=5);
+            dy=0;
         } else{
-            dx = (int)(dxa +=1.1);
+            dy = 0;
+            dx = (int)(dxa =5);
         }
 
         //Capped speed
