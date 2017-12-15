@@ -38,6 +38,7 @@ public class Player extends GameObject{
         Bitmap[] image = new Bitmap[numFrames];
         spritesheet = res;
 
+
             for (int i = 0; i < image.length; i++) {
                 //right
                 if(!horizontal && !vertical) {

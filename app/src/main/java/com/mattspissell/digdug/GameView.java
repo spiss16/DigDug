@@ -38,6 +38,7 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     private Paint paint;
     int i, dir;
     private int numSides = 3;
+    private ArrayList<Tunnel> tunnel;
 
     public static final int MOVESPEED = -3;
 
@@ -73,6 +74,7 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         spritesheet = BitmapFactory.decodeResource(getResources(),R.drawable.dugdig);
         spritesheet = Bitmap.createScaledBitmap(spritesheet,2550,140, false);
         player = new Player(spritesheet,160,140,2);
+
         //Dragon
         dragonspritesheet = BitmapFactory.decodeResource(getResources(),R.drawable.dragon);
         dragonspritesheet = Bitmap.createScaledBitmap(dragonspritesheet,2360,150, false);
@@ -81,6 +83,8 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         gogglesspritesheet = BitmapFactory.decodeResource(getResources(),R.drawable.goggles);
         gogglesspritesheet = Bitmap.createScaledBitmap(gogglesspritesheet,1250,150, false);
         goggles = new Goggles(gogglesspritesheet,160,150,2);
+
+        tunnel = new ArrayList<>();
 
         this.setOnTouchListener(this);
     }
@@ -172,9 +176,19 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     void update(){
         if(player.getPlaying()) {
             bg.update();
+            for(int i = 0; i<tunnel.size(); i++){
+                tunnel.get(i).update();
+                if(tunnel.get(i).getX()<-10)
+                {
+                    tunnel.remove(i);
+                }
+            }
             player.update();
             dragon.update();
             goggles.update();
+            tunnel.add(new Tunnel(player.getX(),player.getY()));
+
+
         }
     }
 
@@ -186,10 +200,15 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
             Canvas canvas = surfaceHolder.lockCanvas();
 
             bg.draw(canvas);
+            for(Tunnel sp: tunnel) {
+                sp.draw(canvas);
+            }
             player.draw(canvas);
             dragon.draw(canvas);
             goggles.draw(canvas);
             surfaceHolder.unlockCanvasAndPost(canvas);
+
+
         }
     }
 }
