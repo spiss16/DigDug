@@ -10,14 +10,11 @@ import android.graphics.Canvas;
 public class Player extends GameObject{
     private Bitmap spritesheet;
     private int score;
-    private double dxa;
     private boolean up, down, left, right, horizontal, vertical;
     private boolean side;
     private boolean playing;
     private Animation animation = new Animation();
     private long startTime;
-    int dir;
-
 
     public void setx(boolean x){horizontal = x;}
     public void sety(boolean y){vertical = y;}
@@ -29,11 +26,6 @@ public class Player extends GameObject{
         score = 0;
         height = h;
         width = w;
-        int dir;
-
-
-
-
 
         Bitmap[] image = new Bitmap[numFrames];
         spritesheet = res;
@@ -82,35 +74,50 @@ public class Player extends GameObject{
 
     }
 
-
     public void setUp(boolean b){up = b;}
     public void setDown(boolean c){down = c;}
     public void setLeft(boolean d){left = d;}
     public void setRight(boolean e){right = e;}
 
-
     public void update(){
         animation.update();
 
-        // If statements based on user input that declare the dx and dy
-        // If statements based on user input that declare the dx and dy
         if(up){
-            dy = -5;
-            dx = 0;
-        } else if (down){
-            dy = 5;
-            dx = 0;
-        } else if (left){
-            dy=0;
-            dx = -5;
-        } else if (right) {
-            dx = 5;
-            dy=0;
-        } /*else{
-            dy = 0;
-            dx = (int)(dxa =5);
-            direction = 0;
-        }*/
+            if(y <= (245)){
+                dy = 0;
+                dx = 0;
+            } else{
+                dy = -5;
+                dx = 0;
+            }
+        }
+        else if (down){
+            if(y > (GameView.SCREEN_HEIGHT-150)){
+                dy = 0;
+                dx = 0;
+            } else{
+                dy = 5;
+                dx = 0;
+            }
+        }
+        else if (left){
+            if(x < 0){
+                dy = 0;
+                dx = 0;
+            } else{
+                dy = 0;
+                dx = -5;
+            }
+        }
+        else if (right){
+            if(x > (GameView.SCREEN_WIDTH-160)){
+                dy = 0;
+                dx = 0;
+            } else{
+                dy = 0;
+                dx = 5;
+            }
+        }
 
         //Capped speed
         if(dy>5)dy=5;
@@ -121,7 +128,6 @@ public class Player extends GameObject{
         if(dx<-5)dx = -5;
         x += dx*2;
         dx = 0;
-
     }
 
     public void draw(Canvas canvas){
@@ -134,7 +140,7 @@ public class Player extends GameObject{
     public boolean getPlaying(){return playing;}
     public void setPlaying(boolean b){playing = b;}
     public void resetDY(){dy = 0;}
-    public void resetDXA(){dxa = 0;}
+    public void resetDX(){dx = 0;}
     public void resetScore(){score = 0;}
 
 }
