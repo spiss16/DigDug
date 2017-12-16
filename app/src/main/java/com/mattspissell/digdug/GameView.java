@@ -7,6 +7,7 @@ import android.graphics.Camera;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -14,6 +15,7 @@ import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Vector;
 
 /**
@@ -41,6 +43,11 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     private ArrayList<Tunnel> tunnel;
     private long tunnelStartTime;
 
+    private ArrayList<Monsters> monsters;
+    private long monstersstarttime;
+    private long monsterselapsed;
+    private Random rand = new Random();
+
     public static final int MOVESPEED = -3;
 
 
@@ -49,7 +56,7 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     private Player player;
     private Dragon dragon;
     private Goggles goggles;
-    private Bitmap spritesheet, dragonspritesheet, gogglesspritesheet;
+    private Bitmap spritesheet, dragonspritesheet, gogglesspritesheet, monstersspritesheet;
 
     public static int getScreenHeight() {
         return SCREEN_HEIGHT;
@@ -84,6 +91,9 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         gogglesspritesheet = BitmapFactory.decodeResource(getResources(),R.drawable.goggles);
         gogglesspritesheet = Bitmap.createScaledBitmap(gogglesspritesheet,1250,150, false);
         goggles = new Goggles(gogglesspritesheet,160,150,2);
+
+        monsters = new ArrayList<>();
+        monstersstarttime = System.nanoTime();
 
         tunnel = new ArrayList<>();
 
@@ -198,10 +208,76 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
             player.update();
             dragon.update();
             goggles.update();
+
+            //add monsters with a timer
+            long monsterselapsed = (System.nanoTime()-monstersstarttime)/1000000;
+            if(monsterselapsed>(2000- 0 /*player.getScore()/4*/)){
+
+                System.out.println("making missile");
+
+                //first monster goes down middle
+                if(monsters.size()==0)
+                {
+                    spritesheet = BitmapFactory.decodeResource(getResources(),R.drawable.dragon);
+                    spritesheet = Bitmap.createScaledBitmap(spritesheet,2360,150, false);
+
+                    //monsters.add(new Monsters(BitmapFactory.decodeResource(getResources(),R.drawable.dragon),
+                      //      SCREEN_WIDTH +10, SCREEN_HEIGHT/2, 15, 15, /*player.getScore()*/ 0, 13));
+                    monsters.add(new Monsters(spritesheet,SCREEN_WIDTH+10,SCREEN_HEIGHT/2, 160, 140,0, 2));
+                }
+                else
+                {
+                    /*monsters.add(new Monsters(BitmapFactory.decodeResource(getResources(),R.drawable.dragon),
+                            SCREEN_WIDTH +10, (int)(rand.nextDouble()*SCREEN_HEIGHT),
+                            15 , 15, player.getScore() 0, 13));*/
+
+                    spritesheet = BitmapFactory.decodeResource(getResources(),R.drawable.dragon);
+                    spritesheet = Bitmap.createScaledBitmap(spritesheet,2360,150, false);
+
+                    //monsters.add(new Monsters(BitmapFactory.decodeResource(getResources(),R.drawable.dragon),
+                    //      SCREEN_WIDTH +10, SCREEN_HEIGHT/2, 15, 15, /*player.getScore()*/ 0, 13));
+                    monsters.add(new Monsters(spritesheet,SCREEN_WIDTH+10,(int)(rand.nextDouble()*SCREEN_HEIGHT), 160, 140,0, 2));
+                }
+
+                //reset the timer
+                monstersstarttime = System.nanoTime();
+            }
+            //check through all monsters for collisions or for necessary removal
+            for(int i = 0; i< monsters.size(); i++)
+            {
+                //update the monsters
+                monsters.get(i).update();
+
+                //collision with a monster
+                if(collision(monsters.get(i), player))
+                {
+                    monsters.remove(i);
+                    player.setPlaying(false);
+                    break;
+                }
+                //when monster gets offscreen
+                if(monsters.get(i).getX()<-100)
+                {
+                    monsters.remove(i);
+                    break;
+                }
+            }
+
+            //add tunnel
             tunnel.add(new Tunnel(player.getX(),player.getY()));
 
 
         }
+    }
+
+    public boolean collision(GameObject a, GameObject b)
+    {
+
+        if(Rect.intersects(a.getRectangle(), b.getRectangle()))
+        {
+            return true;
+        }
+        return false;
     }
 
     void draw(){
@@ -213,8 +289,14 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
                 sp.draw(canvas);
             }
             player.draw(canvas);
-            dragon.draw(canvas);
-            goggles.draw(canvas);
+            //dragon.draw(canvas);
+            //goggles.draw(canvas);
+
+            for(Monsters m: monsters)
+            {
+                m.draw(canvas);
+            }
+
 
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
