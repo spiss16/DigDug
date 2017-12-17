@@ -5,8 +5,11 @@ import android.graphics.Point;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Display;
+import android.media.MediaPlayer;
 
 public class MainActivity extends Activity {
+
+    MediaPlayer bkgdmsc;
 
     GameView gameView;
 
@@ -18,11 +21,17 @@ public class MainActivity extends Activity {
         display.getSize(point);
         gameView = new GameView(this, point);
         setContentView(gameView);
+
+        bkgdmsc = MediaPlayer.create(MainActivity.this,R.raw.digdugmusic);
+        bkgdmsc.setLooping(true);
+        bkgdmsc.start();
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        bkgdmsc.release();
         gameView.pause();
     }
 

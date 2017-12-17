@@ -90,7 +90,7 @@ public class Player extends GameObject{
         }
 
         if(up){
-            if(y <= (245)){
+            if(y <= ((GameView.SCREEN_HEIGHT)/5)){
                 dy = 0;
                 dx = 0;
             } else{
