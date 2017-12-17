@@ -45,6 +45,7 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     private long tunnelStartTime;
 
     private ArrayList<Monsters> monsters;
+    private ArrayList<Monsters2> monsters2;
     private long monstersstarttime;
     private long monsterselapsed;
     private Random rand = new Random();
@@ -67,7 +68,7 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     private Player player;
     private Dragon dragon;
     private Goggles goggles;
-    private Bitmap spritesheet, dragonspritesheet, gogglesspritesheet, monstersspritesheet, deathspritesheet;
+    private Bitmap spritesheet, dragonspritesheet, gogglesspritesheet, spritesheet2, deathspritesheet;
 
     public static int getScreenHeight() {
         return SCREEN_HEIGHT;
@@ -104,6 +105,7 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         goggles = new Goggles(gogglesspritesheet,160,150,2);
 
         monsters = new ArrayList<>();
+        monsters2 = new ArrayList<>();
         monstersstarttime = System.nanoTime();
 
         tunnel = new ArrayList<>();
@@ -256,6 +258,11 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
                     spritesheet = BitmapFactory.decodeResource(getResources(),R.drawable.dragon);
                     spritesheet = Bitmap.createScaledBitmap(spritesheet,2360,150, false);
                     monsters.add(new Monsters(spritesheet,SCREEN_WIDTH+10,(int)((rand.nextDouble()*SCREEN_HEIGHT)+245), 160, 140,0, 2));
+
+                    spritesheet2 = BitmapFactory.decodeResource(getResources(),R.drawable.goggles);
+                    spritesheet2 = Bitmap.createScaledBitmap(spritesheet2,1250,150, false);
+                    monsters2.add(new Monsters2(spritesheet2,SCREEN_WIDTH+10,(int)((rand.nextDouble()*SCREEN_HEIGHT)+245), 160, 150,0, 2));
+
                 }
                 //reset the timer
                 monstersstarttime = System.nanoTime();
@@ -276,6 +283,24 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
                 if(monsters.get(i).getX()<-100)
                 {
                     monsters.remove(i);
+                    break;
+                }
+            }
+            for(int i = 0; i< monsters2.size(); i++)
+            {
+                //update the monsters2
+                monsters2.get(i).update();
+                //collision with a monster
+                if(collision(monsters2.get(i), player))
+                {
+                    monsters2.remove(i);
+                    player.setPlaying(false);
+                    break;
+                }
+                //when monster gets offscreen
+                if(monsters2.get(i).getX()<-100)
+                {
+                    monsters2.remove(i);
                     break;
                 }
             }
@@ -342,6 +367,10 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
             {
                 m.draw(canvas);
             }
+            for(Monsters2 m: monsters2)
+            {
+                m.draw(canvas);
+            }
 
             //draw death
             if(started)
@@ -368,6 +397,7 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         player.resetScore();
         disappear = false;
         monsters.clear();
+        monsters2.clear();
         tunnel.clear();
         player.setY(SCREEN_HEIGHT/2);
         player.setX(100);
