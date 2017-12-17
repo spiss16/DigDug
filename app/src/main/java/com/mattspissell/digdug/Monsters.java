@@ -26,10 +26,10 @@ public class Monsters extends GameObject{
         width = w;
         height = h;
 
-        speed = 7 + (int) (rand.nextDouble()*score/30);
+        speed = 50 + (int) (rand.nextDouble()*score/10);
 
         //cap the monster speed
-        if(speed>40)speed=40;
+        if(speed>150)speed=150;
 
         Bitmap[] image = new Bitmap[numframes];
 
@@ -37,7 +37,7 @@ public class Monsters extends GameObject{
 
         for (int i = 0; i < image.length; i++)
         {
-            image[i] = Bitmap.createBitmap(spritesheet, i* width, 0, width, height);
+            image[i] = Bitmap.createBitmap(spritesheet, (i+8)* width, 0, width, height);
         }
 
         animation.setFrames(image);

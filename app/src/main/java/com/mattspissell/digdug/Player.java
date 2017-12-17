@@ -82,12 +82,19 @@ public class Player extends GameObject{
     public void update(){
         animation.update();
 
+        long elapsed = (System.nanoTime()-startTime/1000000);
+        if(elapsed>100)
+        {
+            score++;
+            startTime = System.nanoTime();
+        }
+
         if(up){
             if(y <= (245)){
                 dy = 0;
                 dx = 0;
             } else{
-                dy = -5;
+                dy = -15;
                 dx = -1;
             }
         }
@@ -96,7 +103,7 @@ public class Player extends GameObject{
                 dy = 0;
                 dx = 0;
             } else{
-                dy = 5;
+                dy = 15;
                 dx = -1;
             }
         }
@@ -106,7 +113,7 @@ public class Player extends GameObject{
                 dx = 0;
             } else{
                 dy = 0;
-                dx = -5;
+                dx = -15;
             }
         }
         else if (right){
@@ -115,17 +122,17 @@ public class Player extends GameObject{
                 dx = 0;
             } else{
                 dy = 0;
-                dx = 5;
+                dx = 15;
             }
         }
 
         //Capped speed
-        if(dy>5)dy=5;
-        if(dy<-5)dy = -5;
+        if(dy>15)dy=15;
+        if(dy<-15)dy = -15;
         y += dy*2;
         dy = 0;
-        if(dx>5)dx=5;
-        if(dx<-5)dx = -5;
+        if(dx>15)dx=15;
+        if(dx<-15)dx = -15;
         x += dx*2;
         dx = 0;
     }
@@ -137,6 +144,7 @@ public class Player extends GameObject{
     // If we were to update score within this class we would do this
     // public int getScore(){return score;}
 
+    public int getScore(){return score;}
     public boolean getPlaying(){return playing;}
     public void setPlaying(boolean b){playing = b;}
     public void resetDY(){dy = 0;}
