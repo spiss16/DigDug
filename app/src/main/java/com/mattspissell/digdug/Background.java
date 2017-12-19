@@ -17,6 +17,7 @@ public class Background {
         dx = GameView.MOVESPEED;
     }
 
+    //resets the background when cucled through once
     public void update(){
         x += dx;
         if(x < -GameView.SCREEN_WIDTH){
@@ -24,6 +25,7 @@ public class Background {
         }
     }
 
+    //draws background to create scrolling effect
     public void draw(Canvas canvas){
         canvas.drawBitmap(image,x,y,null);
         if(x < 0){

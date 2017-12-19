@@ -7,6 +7,8 @@ import android.graphics.Canvas;
  * Created by benda on 12/14/2017.
  */
 
+//WAS USED FOR TESTING ONLY
+
 public class Dragon extends GameObject{
     private Bitmap dragonspritesheet;
     private int score;

@@ -3,7 +3,6 @@ package com.mattspissell.digdug;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Camera;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -18,11 +17,12 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Vector;
 
 /**
  * Created by Jessica on 12/13/2017.
  */
+
+//All of the everything!!!
 
 public class GameView extends SurfaceView implements Runnable, View.OnTouchListener {
 
@@ -39,7 +39,6 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     public static int SCREEN_WIDTH;
     private List<GameObject> gameObjects = new ArrayList<GameObject>();
     private Paint paint;
-    int i, dir;
     private int numSides = 3;
     private ArrayList<Tunnel> tunnel;
     private long tunnelStartTime;
@@ -47,7 +46,6 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     private ArrayList<Monsters> monsters;
     private ArrayList<Monsters2> monsters2;
     private long monstersstarttime;
-    private long monsterselapsed;
     private Random rand = new Random();
 
     private boolean newGameCreated;
@@ -59,16 +57,14 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
 
     private int best = 0;
 
-
     public static final int MOVESPEED = -3;
 
-
-    private Bitmap background;
+    private Bitmap background, startscreen;
     private Background bg;
     private Player player;
     private Dragon dragon;
     private Goggles goggles;
-    private Bitmap spritesheet, dragonspritesheet, gogglesspritesheet, spritesheet2, deathspritesheet;
+    private Bitmap spritesheet, spritesheet2, deathspritesheet;
 
     public static int getScreenHeight() {
         return SCREEN_HEIGHT;
@@ -76,6 +72,8 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     public static int getScreenWidth() {
         return SCREEN_WIDTH;
     }
+
+
 
     public GameView(Context context, Point point) {
         super(context);
@@ -86,28 +84,21 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         SCREEN_WIDTH = point.x;
 
         // Background
-
         background = BitmapFactory.decodeResource(getResources(),R.drawable.background);
         background = Bitmap.createScaledBitmap(background,SCREEN_WIDTH,SCREEN_HEIGHT, false);
         bg = new Background(background);
+
         // Player
         spritesheet = BitmapFactory.decodeResource(getResources(),R.drawable.dugdig);
         spritesheet = Bitmap.createScaledBitmap(spritesheet,2550,140, false);
         player = new Player(spritesheet,160,140,2);
 
-        //Dragon
-        dragonspritesheet = BitmapFactory.decodeResource(getResources(),R.drawable.dragon);
-        dragonspritesheet = Bitmap.createScaledBitmap(dragonspritesheet,2360,150, false);
-        dragon = new Dragon(dragonspritesheet,160,140,2);
-        //Goggles
-        gogglesspritesheet = BitmapFactory.decodeResource(getResources(),R.drawable.goggles);
-        gogglesspritesheet = Bitmap.createScaledBitmap(gogglesspritesheet,1250,150, false);
-        goggles = new Goggles(gogglesspritesheet,160,150,2);
-
+        //Bunches of monsters
         monsters = new ArrayList<>();
         monsters2 = new ArrayList<>();
-        monstersstarttime = System.nanoTime();
 
+        monstersstarttime = System.nanoTime();
+        //tunnels
         tunnel = new ArrayList<>();
 
         tunnelStartTime = System.nanoTime();
@@ -118,11 +109,12 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     @Override
     public boolean onTouch (View view, MotionEvent event){
 
-
+        //borders for touching the screen
         int hL = SCREEN_HEIGHT/2;
         int vLL = SCREEN_WIDTH/4;
         int vLR = (3*SCREEN_WIDTH)/4;
 
+        //getting the location of the screen touch
         int x = (int) event.getX();
         int y = (int) event.getY();
 
@@ -139,6 +131,7 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
 
             return true;
         }
+        //setting the direction of Dug's acceleration based on screen touch
         if(event.getAction()==MotionEvent.ACTION_UP){
             //right
             if((x>vLR)&&(x<SCREEN_WIDTH)&&(y>0)&&(y<SCREEN_HEIGHT)){
@@ -146,17 +139,13 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
             player.setDown(false);
             player.setLeft(false);
             player.setRight(true);
-            player.setx(false);
-            player.sety(false);
         }
         //up
-        else if((x>vLL)&&(x<vLR)&&(y>0)&&(y<hL)){
+            else if((x>vLL)&&(x<vLR)&&(y>0)&&(y<hL)){
                 player.setUp(true);
                 player.setDown(false);
                 player.setLeft(false);
                 player.setRight(false);
-                player.setx(false);
-                player.sety(true);
             }
             //left
             else if((x>0)&&(x<vLL)&&(y>0)&&(y<SCREEN_HEIGHT)){
@@ -164,8 +153,6 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
                 player.setDown(false);
                 player.setLeft(true);
                 player.setRight(false);
-                player.setx(true);
-                player.sety(false);
             }
             //down
             else if((x>vLL)&&(x<vLR)&&(y>hL)&&(y<SCREEN_HEIGHT)){
@@ -173,8 +160,6 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
                 player.setDown(true);
                 player.setLeft(false);
                 player.setRight(false);
-                player.setx(true);
-                player.sety(true);
 
             }
             return true;
@@ -183,7 +168,7 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
     }
 
 
-
+    //running the business
     @Override
     public void run() {
         previousTImeMilliseconds = System.currentTimeMillis();
@@ -199,7 +184,7 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
             previousTImeMilliseconds = currentTimeMilliseconds;
         }
     }
-
+    //pausing the business
     public void pause(){
         playing = false;
         try{
@@ -207,26 +192,29 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         }
         catch(InterruptedException e){}
     }
-
+    //resuming the business
     public void resume(){
         playing = true;
         gameThread = new Thread(this);
         gameThread.start();
     }
 
+    //updating the game
     void update(){
+
         if(player.getPlaying()) {
+            //update
             bg.update();
 
 
-            // Investigate this to improve performance
+            // building the tunnel, slows down performance
             long elapsed = (System.nanoTime()-tunnelStartTime)/1;
             if(elapsed > 1000000000)
             {
                 tunnel.add(new Tunnel(player.getX(),player.getY()));
                 tunnelStartTime = System.nanoTime();
             }
-
+            //remove tunnels after they pass
             for (int i = 0; i < tunnel.size(); i++)
             {
                     tunnel.get(i).update();
@@ -236,14 +224,10 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
             }
 
             player.update();
-            dragon.update();
-            goggles.update();
 
             //add monsters with a timer
             long monsterselapsed = (System.nanoTime()-monstersstarttime)/1000000;
             if(monsterselapsed>(2000- player.getScore()/4)){
-
-                System.out.println("making missile");
 
                 //first monster goes down middle
                 if(monsters.size()==0)
@@ -290,7 +274,7 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
             {
                 //update the monsters2
                 monsters2.get(i).update();
-                //collision with a monster
+                //collision with a monster2
                 if(collision(monsters2.get(i), player))
                 {
                     monsters2.remove(i);
@@ -323,8 +307,8 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
                 spritesheet = BitmapFactory.decodeResource(getResources(),R.drawable.dugdead);
                 spritesheet = Bitmap.createScaledBitmap(spritesheet,2000,200, false);
                 death = new Death(spritesheet,player.getX(),player.getY(), 170, 200, 2);
-
             }
+
             death.update();
             long resetElapsed = (System.nanoTime() - startReset/1000000);
 
@@ -332,14 +316,11 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
             {
                 newGame();
             }
-           /*newGameCreated = false;
-            if (!newGameCreated)
-            {
-                newGame();
-            }*/
+
         }
     }
 
+    //determine if Dug crashes into a monster
     public boolean collision(GameObject a, GameObject b)
     {
 
@@ -350,6 +331,7 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         return false;
     }
 
+    //drawing that business
     void draw(){
         if(surfaceHolder.getSurface().isValid()){
             Canvas canvas = surfaceHolder.lockCanvas();
@@ -360,8 +342,6 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
             }
             if(!disappear) {
                 player.draw(canvas);
-                //dragon.draw(canvas);
-                //goggles.draw(canvas);
             }
             for(Monsters m: monsters)
             {
@@ -379,21 +359,19 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
             }
 
             drawText(canvas);
-          //  canvas.restoreToCount(savedState);
-
 
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
     }
 
+    //starting a new game for that business
     public void newGame()
     {
-
-
         if(player.getScore()>best)
         {
             best = player.getScore();
         }
+
         player.resetScore();
         disappear = false;
         monsters.clear();
@@ -402,29 +380,28 @@ public class GameView extends SurfaceView implements Runnable, View.OnTouchListe
         player.setY(SCREEN_HEIGHT/2);
         player.setX(100);
 
-
-
         newGameCreated = true;
     }
+    //draw text to that screen
     public void drawText(Canvas canvas)
     {
         Paint paint = new Paint();
         paint.setColor(Color.BLACK);
-        paint.setTextSize(50);
+        paint.setTextSize(SCREEN_WIDTH/40);
         paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-        canvas.drawText("Distance: "+ (player.getScore()*3), 100, 100, paint);
-        canvas.drawText("Best: " + best *3, SCREEN_WIDTH - 300 , 100, paint);
+        canvas.drawText("Distance: "+ (player.getScore()), SCREEN_WIDTH/15, SCREEN_HEIGHT/12, paint);
+        canvas.drawText("Best: " + best, (SCREEN_WIDTH-SCREEN_WIDTH/7) , SCREEN_HEIGHT/12, paint);
 
         if (!player.getPlaying()&&newGameCreated && reset)
         {
             Paint paint1 = new Paint();
             paint1.setColor(Color.RED);
-            paint1.setTextSize(150);
+            paint1.setTextSize(SCREEN_WIDTH/15);
             paint1.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
             canvas.drawText("TIME TO EXCAVATE!", SCREEN_WIDTH/3, SCREEN_HEIGHT/2, paint1);
 
-            paint1.setTextSize(75);
-            canvas.drawText("TAP A DIRECTION TO DIG", SCREEN_WIDTH/2, (SCREEN_HEIGHT/2) + 100, paint1);
+            paint1.setTextSize(SCREEN_WIDTH/30);
+            canvas.drawText("TAP A DIRECTION TO DIG", SCREEN_WIDTH/2, (SCREEN_HEIGHT/2) + SCREEN_HEIGHT/8, paint1);
 
         }
     }

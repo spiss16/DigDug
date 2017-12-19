@@ -9,6 +9,8 @@ import java.util.Random;
  * Created by benda on 12/16/2017.
  */
 
+//Animation for the Dragon, similar to Player animation
+
 public class Monsters extends GameObject{
 
     private int score;
@@ -26,15 +28,16 @@ public class Monsters extends GameObject{
         width = w;
         height = h;
 
-        speed = 50 + (int) (rand.nextDouble()*score/10);
+        speed = 50;
 
-        //cap the monster speed
+        //cap the monster speed in case we decided to accelerate as the time goes on
         if(speed>150)speed=150;
 
         Bitmap[] image = new Bitmap[numframes];
 
         spritesheet = res;
 
+        //determine which frames are being used
         for (int i = 0; i < image.length; i++)
         {
             image[i] = Bitmap.createBitmap(spritesheet, (i+8)* width, 0, width, height);

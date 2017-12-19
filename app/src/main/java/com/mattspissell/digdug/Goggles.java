@@ -4,6 +4,8 @@ package com.mattspissell.digdug;
  * Created by benda on 12/14/2017.
  */
 
+//WAS USED FOR TESTING ONLY
+
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 

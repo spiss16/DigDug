@@ -13,21 +13,26 @@ public class Animation {
     private long delay;
     private boolean playedOnce;
 
+    //sets frames for all animation in game
     public void setFrames(Bitmap[] frames){
         this.frames = frames;
         currentFrame = 0;
         startTime = System.nanoTime();
     }
 
+    //delay for animation frames
     public void setDelay(long d){delay = d;}
     public void setFrame(int i){currentFrame = i;}
 
     public void update(){
         long elapsed = (System.nanoTime()-startTime)/1000000;
+
+        //next frame of animation
         if(elapsed>delay){
             currentFrame++;
             startTime = System.nanoTime();
         }
+        //reset frame
         if(currentFrame == frames.length){
             currentFrame = 0;
             playedOnce = true;

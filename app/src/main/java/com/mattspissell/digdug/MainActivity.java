@@ -19,14 +19,17 @@ public class MainActivity extends Activity {
         Display display = getWindowManager().getDefaultDisplay();
         Point point = new Point();
         display.getSize(point);
+        //show everything!
         gameView = new GameView(this, point);
         setContentView(gameView);
 
+        //music!
         bkgdmsc = MediaPlayer.create(MainActivity.this,R.raw.digdugmusic);
         bkgdmsc.setLooping(true);
         bkgdmsc.start();
 
     }
+
 
     @Override
     protected void onPause() {

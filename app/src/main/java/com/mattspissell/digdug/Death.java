@@ -8,6 +8,8 @@ import android.graphics.Canvas;
  * Created by benda on 12/16/2017.
  */
 
+//animation for the death sequence of Dug. There is a small bug where his death animation freezes if the screen is touch while he dies
+
 public class Death {
     private int x;
     private int y;
@@ -32,13 +34,9 @@ public class Death {
         {
             if(i%5==0&&i>0)row++;
             image[i] = Bitmap.createBitmap(spritesheet, (i-(5*row))*width, row*height, width, height);
-
-
-
         }
         animation.setFrames(image);
-        animation.setDelay(400);
-
+        animation.setDelay(150);
     }
 
     public void draw(Canvas canvas)
@@ -55,7 +53,4 @@ public class Death {
             animation.update();
         }
     }
-
-    public int getHeight(){return height;}
-
 }

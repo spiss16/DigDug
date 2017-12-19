@@ -9,13 +9,16 @@ import java.util.Random;
  * Created by benda on 12/17/2017.
  */
 
+//Same as Monster class, but for the Goggles enemies
+
     public class Monsters2 extends GameObject{
 
-        private int score;
         private int speed;
+        private Player player;
         private Random rand = new Random();
         private Animation animation = new Animation();
         private Bitmap spritesheet2;
+        private long startTime;
 
 
         public Monsters2(Bitmap res, int x, int y, int w, int h, int s, int numframes)
@@ -26,10 +29,7 @@ import java.util.Random;
             width = w;
             height = h;
 
-            speed = 50 + (int) (rand.nextDouble()*score/10);
-
-            //cap the monster speed
-            if(speed>150)speed=150;
+            speed = 50;
 
             Bitmap[] image = new Bitmap[numframes];
 
@@ -38,6 +38,7 @@ import java.util.Random;
             for (int i = 0; i < image.length; i++)
             {
                 image[i] = Bitmap.createBitmap(spritesheet2, (i+5)* width, 0, width, height);
+                startTime = System.nanoTime();
             }
 
             animation.setFrames(image);
@@ -46,6 +47,7 @@ import java.util.Random;
         }
         public void update()
         {
+
             x-=speed;
             animation.update();
 
